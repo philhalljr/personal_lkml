@@ -17,11 +17,11 @@ view: untappd_raw_sheets_file {
     sql:
     CASE
       WHEN ${beer_abv} is NULL THEN "N/A"
-      WHEN ${beer_abv} <= 0.04 THEN "LOW"
-      WHEN ${beer_abv} < 0.055 THEN "MED LOW"
-      WHEN ${beer_abv} < 0.07 THEN "MED"
-      WHEN ${beer_abv} < 0.085 THEN "MED HIGH"
-      ELSE "HIGH"
+      WHEN ${beer_abv} <= 0.04 THEN "Low"
+      WHEN ${beer_abv} < 0.055 THEN "Med Low"
+      WHEN ${beer_abv} < 0.07 THEN "Med"
+      WHEN ${beer_abv} < 0.085 THEN "Med High"
+      ELSE "High"
     END;;
   }
 
@@ -41,11 +41,11 @@ view: untappd_raw_sheets_file {
     sql:
     CASE
       WHEN ${beer_ibu_abv_ratio} is NULL THEN "N/A"
-      WHEN ${beer_ibu_abv_ratio} < 2.5 THEN "LOW"
-      WHEN ${beer_ibu_abv_ratio} < 5 THEN "MED LOW"
-      WHEN ${beer_ibu_abv_ratio} < 7.5 THEN "MED"
-      WHEN ${beer_ibu_abv_ratio} < 10 THEN "MED HIGH"
-      ELSE "HIGH"
+      WHEN ${beer_ibu_abv_ratio} < 2.5 THEN "Low"
+      WHEN ${beer_ibu_abv_ratio} < 5 THEN "Med Low"
+      WHEN ${beer_ibu_abv_ratio} < 7.5 THEN "Med"
+      WHEN ${beer_ibu_abv_ratio} < 10 THEN "Med High"
+      ELSE "High"
     END;;
   }
 
@@ -54,11 +54,11 @@ view: untappd_raw_sheets_file {
     sql:
     CASE
       WHEN ${beer_ibu} is NULL THEN "N/A"
-      WHEN ${beer_ibu} < 10 THEN "LOW"
-      WHEN ${beer_ibu} < 30 THEN "MED LOW"
-      WHEN ${beer_ibu} < 60 THEN "MED"
-      WHEN ${beer_ibu} < 80 THEN "MED HIGH"
-      ELSE "HIGH"
+      WHEN ${beer_ibu} < 10 THEN "Low"
+      WHEN ${beer_ibu} < 30 THEN "Med Low"
+      WHEN ${beer_ibu} < 60 THEN "Med"
+      WHEN ${beer_ibu} < 80 THEN "Med High"
+      ELSE "High"
     END;;
   }
 
@@ -156,6 +156,11 @@ view: untappd_raw_sheets_file {
     sql: ${TABLE}.purchase_venue ;;
   }
 
+  dimension: purchase_venue_id {
+    type: number
+    sql: FARM_FINGERPRINT(${purchase_venue}) ;;
+  }
+
   dimension: rating_score {
     type: number
     sql: ${TABLE}.rating_score ;;
@@ -164,6 +169,11 @@ view: untappd_raw_sheets_file {
   dimension: serving_type {
     type: string
     sql: ${TABLE}.serving_type ;;
+  }
+
+  dimension: user_beer_id {
+    type: string
+    sql: CONCAT(${user_id},"|",CAST(${beer_id} AS STRING)) ;;
   }
 
   dimension: user_catg {
@@ -198,7 +208,7 @@ view: untappd_raw_sheets_file {
 
   dimension: venue_id {
     type: string
-    sql: ${TABLE}.venue_id ;;
+    sql: FARM_FINGERPRINT(${venue_name}) ;;
   }
 
   dimension: venue_lat {
@@ -221,8 +231,8 @@ view: untappd_raw_sheets_file {
     sql: ${TABLE}.venue_state ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [venue_name, user_fname, brewery_name, user_lname, beer_name]
+  measure: avg_rating_score {
+    type: average
+    sql: ${rating_score} ;;
   }
 }
