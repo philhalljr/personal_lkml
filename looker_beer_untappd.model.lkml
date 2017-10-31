@@ -2,15 +2,18 @@ connection: "lookerdata_bigquery_standard_sql"
 
 # include all the views
 include: "*.view"
-
 # include all the dashboards
 include: "*.dashboard"
 
-explore: checkin {
+explore: checkin {}
+
+explore: checkin2 {
   label: "Looker Beer Analysis"
+  from: checkin
+  view_name: checkin
   join: user_beer {
     type: inner
-    sql_on: ${checkin.beer_id} = ${user_beer.beer_id} and ${checkin.user_id} = ${user_beer.beer_id};;
+    sql_on: ${checkin.beer_id} = ${user_beer.beer_id} and ${checkin.user_id} = ${user_beer.user_id};;
     relationship: many_to_one
   }
   join: user_beer_comp {
