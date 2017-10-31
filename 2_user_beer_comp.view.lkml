@@ -22,4 +22,10 @@ view: user_beer_comp {
   measure: overlap {
     type: count
   }
+
+  measure: avg_rating_dif {
+    type: average
+    value_format_name: decimal_2
+    sql: ${rating_dif} ;;
+  }
 }

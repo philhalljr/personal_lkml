@@ -183,6 +183,7 @@ view: checkin {
   }
 
   dimension: checkin_url {
+    label: "URL"
     link: {
       label: "{{ value }}"
       url: "{{ value | uri_encode }}"
@@ -192,6 +193,11 @@ view: checkin {
   dimension: comment {
     type: string
     sql: ${TABLE}.comment ;;
+  }
+
+  dimension: comment_length {
+    type: number
+    sql: LENGTH(${comment}) ;;
   }
 
   dimension_group: created {
@@ -330,12 +336,7 @@ view: checkin {
     sql_distinct_key: ${venue_id} ;;
   }
 
-  dimension: comment_length {
-    type: number
-    sql: LENGTH(${comment}) ;;
-  }
-
-  measure: checkin_count {
+  measure: count {
     type: count
   }
 
@@ -345,8 +346,15 @@ view: checkin {
     sql: ${created_date} ;;
   }
 
+  measure: avg_checkin_length {
+    type: average
+    value_format_name: decimal_1
+    sql: ${comment_length} ;;
+  }
+
   measure: checkins_per_day {
     type: number
-    sql: ${checkin_count}/${day_count} ;;
+    value_format_name: decimal_1
+    sql: ${count}/${day_count} ;;
   }
 }

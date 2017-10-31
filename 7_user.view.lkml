@@ -2,7 +2,7 @@ include: "looker_beer_untappd.model.lkml"
 view: user {
   derived_table: {
     sql_trigger_value: CURRENT_DATE() ;;
-    explore_source: checkin {
+    explore_source: checkin_model_ref {
       column: user_id {}
       column: user_catg {}
       column: user_fname {}
@@ -11,28 +11,31 @@ view: user {
   }
   dimension: user_id {
     type: string
-    hidden: yes
     primary_key: yes
   }
 
   dimension: user_catg {
+    label: "Category"
     type: string
   }
 
   dimension: user_fname {
+    label: "First Name"
     type: string
   }
 
   dimension: user_lname {
+    label: "Last Name"
     type: string
   }
 
   dimension: user_fullname {
+    label: "Full Name"
     type: string
     sql: CONCAT(${user_fname}," ",${user_lname}) ;;
   }
 
-  measure: user_count {
+  measure: count {
     type: count
   }
 }

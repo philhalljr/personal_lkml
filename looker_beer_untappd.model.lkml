@@ -5,12 +5,13 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
-explore: checkin {}
-
-explore: checkin2 {
-  label: "Looker Beer Analysis"
+explore: checkin_model_ref {
   from: checkin
-  view_name: checkin
+  hidden: yes
+}
+
+explore: checkin {
+  label: "Looker Beer Analysis"
   join: user_beer {
     type: inner
     sql_on: ${checkin.beer_id} = ${user_beer.beer_id} and ${checkin.user_id} = ${user_beer.user_id};;

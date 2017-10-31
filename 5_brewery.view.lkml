@@ -2,7 +2,7 @@ include: "looker_beer_untappd.model.lkml"
 view: brewery {
   derived_table: {
     sql_trigger_value: CURRENT_DATE() ;;
-    explore_source: checkin {
+    explore_source: checkin_model_ref {
       column: brewery_id {}
       column: brewery_name {}
       column: brewery_city {}
@@ -18,31 +18,36 @@ view: brewery {
   }
 
   dimension: brewery_name {
+    label: "Name"
     type: string
   }
 
   dimension: brewery_city {
+    label: "City"
     type: string
   }
 
   dimension: brewery_state {
+    label: "State"
     type: string
     map_layer_name: us_states
   }
 
   dimension: brewery_country {
+    label: "Country"
     type: string
     map_layer_name: countries
   }
 
   dimension: brewery_url {
+    label: "URL"
     link: {
       label: "{{ value }}"
       url: "{{ value | uri_encode }}"
     }
   }
 
-  measure: brewery_count {
+  measure: count {
     type: count
   }
 }
