@@ -2,7 +2,7 @@ include: "looker_beer_untappd.model.lkml"
 view: beer {
   derived_table: {
     sql_trigger_value: CURRENT_DATE() ;;
-    explore_source: untappd_raw_sheets_file {
+    explore_source: checkin {
       column: beer_id {}
       column: brewery_id {}
       column: beer_name {}
@@ -21,7 +21,6 @@ view: beer {
   dimension: beer_id {
     type: number
     primary_key: yes
-    hidden: yes
   }
 
   dimension: brewery_id {
@@ -75,7 +74,7 @@ view: beer {
     }
   }
 
-  measure: beer_count {
+  measure: count {
     type: count
   }
 

@@ -2,7 +2,7 @@ include: "looker_beer_untappd.model.lkml"
 view: user {
   derived_table: {
     sql_trigger_value: CURRENT_DATE() ;;
-    explore_source: untappd_raw_sheets_file {
+    explore_source: checkin {
       column: user_id {}
       column: user_catg {}
       column: user_fname {}

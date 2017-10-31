@@ -2,11 +2,12 @@
 ## https://drive.google.com/open?id=1D40fHoBo_ArWJA5CVMxzo67erOcTauM5qyOj1Db3Fg0
 ## used as the basis to created normalized data structure using NDTs
 
-view: untappd_raw_sheets_file {
+view: checkin {
   sql_table_name: looker_untappd_beer.untappd_checkin ;;
 
   dimension: beer_abv {
     type: number
+    hidden: yes
     ## error handling on issues with raw file where nulls come in as 0s
     ## converting to decimal so when formatted as % will look good.
     sql: IF(${TABLE}.beer_abv = 0,NULL,${TABLE}.beer_abv/100.0) ;;
@@ -14,117 +15,178 @@ view: untappd_raw_sheets_file {
 
   dimension: beer_abv_bucket {
     type: string
-    sql:
-    CASE
-      WHEN ${beer_abv} is NULL THEN "N/A"
-      WHEN ${beer_abv} <= 0.04 THEN "Low"
-      WHEN ${beer_abv} < 0.055 THEN "Med Low"
-      WHEN ${beer_abv} < 0.07 THEN "Med"
-      WHEN ${beer_abv} < 0.085 THEN "Med High"
-      ELSE "High"
-    END;;
+    hidden: yes
+    case: {
+      when: {
+        sql: ${beer_abv} is NULL ;;
+        label: "N/A"
+      }
+      when: {
+        sql: ${beer_abv} <= 0.04 ;;
+        label: "Low"
+      }
+      when: {
+        sql: ${beer_abv} < 0.055 ;;
+        label: "Med Low"
+      }
+      when: {
+        sql: ${beer_abv} < 0.07 ;;
+        label: "Med"
+      }
+      when: {
+        sql: ${beer_abv} < 0.085 ;;
+        label: "Med High"
+      }
+      else: "High"
+    }
   }
 
   dimension: beer_ibu {
     type: number
+    hidden: yes
     ## error handling on issues with raw file where nulls come in as 0s
     sql: IF(${TABLE}.beer_ibu = 0,NULL,${TABLE}.beer_ibu) ;;
   }
 
   dimension: beer_ibu_abv_ratio {
     type: number
+    hidden: yes
     sql: ${beer_ibu} / (${beer_abv} * 100) ;;
   }
 
   dimension: beer_ibu_abv_ratio_bucket {
     type: string
-    sql:
-    CASE
-      WHEN ${beer_ibu_abv_ratio} is NULL THEN "N/A"
-      WHEN ${beer_ibu_abv_ratio} < 2.5 THEN "Low"
-      WHEN ${beer_ibu_abv_ratio} < 5 THEN "Med Low"
-      WHEN ${beer_ibu_abv_ratio} < 7.5 THEN "Med"
-      WHEN ${beer_ibu_abv_ratio} < 10 THEN "Med High"
-      ELSE "High"
-    END;;
+    hidden: yes
+    case: {
+      when: {
+        sql: ${beer_ibu_abv_ratio} is NULL ;;
+        label: "N/A"
+      }
+      when: {
+        sql: ${beer_ibu_abv_ratio} < 2.5 ;;
+        label: "Low"
+      }
+      when: {
+        sql: ${beer_ibu_abv_ratio} < 5 ;;
+        label: "Med Low"
+      }
+      when: {
+        sql: ${beer_ibu_abv_ratio} < 7.5 ;;
+        label: "Med"
+      }
+      when: {
+        sql: ${beer_ibu_abv_ratio} < 10 ;;
+        label: "Med High"
+      }
+      else: "High"
+    }
   }
 
   dimension: beer_ibu_bucket {
     type: string
-    sql:
-    CASE
-      WHEN ${beer_ibu} is NULL THEN "N/A"
-      WHEN ${beer_ibu} < 10 THEN "Low"
-      WHEN ${beer_ibu} < 30 THEN "Med Low"
-      WHEN ${beer_ibu} < 60 THEN "Med"
-      WHEN ${beer_ibu} < 80 THEN "Med High"
-      ELSE "High"
-    END;;
+    hidden: yes
+    case: {
+      when: {
+        sql: ${beer_ibu} is NULL ;;
+        label: "N/A"
+      }
+      when: {
+        sql: ${beer_ibu} < 10 ;;
+        label: "Low"
+      }
+      when: {
+        sql: ${beer_ibu} < 30 ;;
+        label: "Med Low"
+      }
+      when: {
+        sql: ${beer_ibu} < 60 ;;
+        label: "Med"
+      }
+      when: {
+        sql: ${beer_ibu} < 80 ;;
+        label: "Med High"
+      }
+      else: "High"
+    }
   }
 
   dimension: beer_id {
     type: number
+    hidden: yes
     sql: ${TABLE}.beer_id ;;
   }
 
   dimension: beer_name {
     type: string
+    hidden: yes
     sql: ${TABLE}.beer_name ;;
   }
 
   dimension: beer_type {
     type: string
+    hidden: yes
     sql: ${TABLE}.beer_type ;;
   }
 
   dimension: beer_type_bucket {
     type: string
+    hidden: yes
     sql: IF(STRPOS(${beer_type}," - ")<>0,SUBSTR(${beer_type},1,STRPOS(${beer_type}," - ")-1),"Other");;
   }
 
   dimension: beer_url {
     type: string
+    hidden: yes
     sql: ${TABLE}.beer_url ;;
   }
 
   dimension: brewery_city {
     type: string
+    hidden: yes
     sql: ${TABLE}.brewery_city ;;
   }
 
   dimension: brewery_country {
     type: string
+    hidden: yes
     sql: ${TABLE}.brewery_country ;;
   }
 
   dimension: brewery_id {
     type: number
+    hidden: yes
     sql: ${TABLE}.brewery_id ;;
   }
 
   dimension: brewery_name {
     type: string
+    hidden: yes
     sql: ${TABLE}.brewery_name ;;
   }
 
   dimension: brewery_state {
     type: string
+    hidden: yes
     sql: ${TABLE}.brewery_state ;;
   }
 
   dimension: brewery_url {
     type: string
+    hidden: yes
     sql: ${TABLE}.brewery_url ;;
   }
 
   dimension: checkin_id {
     type: number
+    primary_key: yes
     sql: ${TABLE}.checkin_id ;;
   }
 
   dimension: checkin_url {
-    type: string
-    sql: ${TABLE}.checkin_url ;;
+    link: {
+      label: "{{ value }}"
+      url: "{{ value | uri_encode }}"
+    }
   }
 
   dimension: comment {
@@ -173,66 +235,118 @@ view: untappd_raw_sheets_file {
 
   dimension: user_beer_id {
     type: string
+    hidden: yes
     sql: CONCAT(${user_id},"|",CAST(${beer_id} AS STRING)) ;;
   }
 
   dimension: user_catg {
     type: string
+    hidden: yes
     sql: ${TABLE}.user_catg ;;
   }
 
   dimension: user_fname {
     type: string
+    hidden: yes
     sql: ${TABLE}.user_fname ;;
   }
 
   dimension: user_id {
     type: string
+    hidden: yes
     sql: ${TABLE}.user_id ;;
   }
 
   dimension: user_lname {
     type: string
+    hidden: yes
     sql: ${TABLE}.user_lname ;;
   }
 
   dimension: venue_city {
     type: string
+    hidden: yes
     sql: ${TABLE}.venue_city ;;
+  }
+
+  dimension: venue_city_state_country {
+    type: string
+    hidden: yes
+    sql: CONCAT(${venue_city},", ",${venue_state},", ",${venue_country}) ;;
   }
 
   dimension: venue_country {
     type: string
+    hidden: yes
     sql: ${TABLE}.venue_country ;;
   }
 
   dimension: venue_id {
     type: string
+    hidden: yes
     sql: FARM_FINGERPRINT(${venue_name}) ;;
   }
 
   dimension: venue_lat {
     type: number
+    hidden: yes
     sql: ${TABLE}.venue_lat ;;
   }
 
   dimension: venue_lng {
     type: number
+    hidden: yes
     sql: ${TABLE}.venue_lng ;;
   }
 
   dimension: venue_name {
     type: string
+    hidden: yes
     sql: ${TABLE}.venue_name ;;
   }
 
   dimension: venue_state {
     type: string
+    hidden: yes
     sql: ${TABLE}.venue_state ;;
   }
 
   measure: avg_rating_score {
     type: average
     sql: ${rating_score} ;;
+  }
+
+  measure: avg_venue_lat {
+    type: average_distinct
+    hidden: yes
+    sql: ${venue_lat} ;;
+    sql_distinct_key: ${venue_id} ;;
+  }
+
+  measure: avg_venue_lng {
+    type: average_distinct
+    hidden: yes
+    sql: ${venue_lng} ;;
+    sql_distinct_key: ${venue_id} ;;
+  }
+
+  dimension: comment_length {
+    type: number
+    sql: LENGTH(${comment}) ;;
+  }
+
+  measure: checkin_count {
+    type: count
+  }
+
+  measure: day_count {
+    type: count_distinct
+    hidden: yes
+    sql: ${created_date} ;;
+  }
+
+  measure: checkins_per_day {
+    type: number
+    sql: ${checkin_count}/${day_count} ;;
   }
 }

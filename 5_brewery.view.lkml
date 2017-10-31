@@ -2,7 +2,7 @@ include: "looker_beer_untappd.model.lkml"
 view: brewery {
   derived_table: {
     sql_trigger_value: CURRENT_DATE() ;;
-    explore_source: untappd_raw_sheets_file {
+    explore_source: checkin {
       column: brewery_id {}
       column: brewery_name {}
       column: brewery_city {}
@@ -14,14 +14,7 @@ view: brewery {
 
   dimension: brewery_id {
     type: number
-    hidden: yes
     primary_key: yes
-  }
-
-  dimension: venue_id {
-    type: number
-    hidden: yes
-    sql: FARM_FINGERPRINT(${brewery_name}) ;;
   }
 
   dimension: brewery_name {
@@ -34,10 +27,12 @@ view: brewery {
 
   dimension: brewery_state {
     type: string
+    map_layer_name: us_states
   }
 
   dimension: brewery_country {
     type: string
+    map_layer_name: countries
   }
 
   dimension: brewery_url {
