@@ -4,7 +4,7 @@ view: user_beer_comp {
 
   dimension: rating_dif {
     type: number
-    sql: ABS(${user_beer.avg_rating_score} - ${user_beer_comp.avg_rating_score}) ;;
+    sql: ABS(${user_beer.beer_rating} - ${user_beer_comp.beer_rating}) ;;
   }
 
   dimension: compatibility_score_gran {
@@ -13,7 +13,7 @@ view: user_beer_comp {
     sql: (4.75 - ${rating_dif}) / 4.75 ;;
   }
 
-  measure: compatibility_score {
+  measure: similarity {
     type: average
     value_format_name: percent_1
     sql: ${compatibility_score_gran} ;;

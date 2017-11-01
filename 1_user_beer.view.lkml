@@ -6,7 +6,7 @@ view: user_beer {
       column: user_beer_id {}
       column: user_id {}
       column: beer_id {}
-      column: avg_rating_score {}
+      column: beer_rating {field: checkin_model_ref.avg_rating}
     }
   }
   dimension: user_beer_id {
@@ -23,7 +23,7 @@ view: user_beer {
     type: number
   }
 
-  dimension: avg_rating_score {
+  dimension: beer_rating {
     type: number
   }
 
@@ -31,9 +31,9 @@ view: user_beer {
     type: count
   }
 
-  measure: avg_beer_rating {
+  measure: avg_rating {
     type: average
     value_format_name: decimal_2
-    sql: ${avg_rating_score} ;;
+    sql: ${beer_rating} ;;
   }
 }

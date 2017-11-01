@@ -317,9 +317,19 @@ view: checkin {
     sql: ${TABLE}.venue_state ;;
   }
 
-  measure: avg_rating_score {
+  measure: avg_rating {
     type: average
     sql: ${rating_score} ;;
+  }
+
+  measure: count {
+    type: count
+  }
+
+  measure: avg_checkin_length {
+    type: average
+    value_format_name: decimal_1
+    sql: ${comment_length} ;;
   }
 
   measure: avg_venue_lat {
@@ -336,25 +346,15 @@ view: checkin {
     sql_distinct_key: ${venue_id} ;;
   }
 
-  measure: count {
-    type: count
-  }
-
-  measure: day_count {
+  measure: days_active {
     type: count_distinct
     hidden: yes
     sql: ${created_date} ;;
   }
 
-  measure: avg_checkin_length {
-    type: average
-    value_format_name: decimal_1
-    sql: ${comment_length} ;;
-  }
-
   measure: checkins_per_day {
     type: number
     value_format_name: decimal_1
-    sql: ${count}/${day_count} ;;
+    sql: ${count}/${days_active} ;;
   }
 }
