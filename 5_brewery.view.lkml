@@ -25,17 +25,20 @@ view: brewery {
   dimension: brewery_city {
     label: "City"
     type: string
+    drill_fields: [brewery_name]
   }
 
   dimension: brewery_state {
     label: "State"
     type: string
+    drill_fields: [brewery_city,brewery_name]
     map_layer_name: us_states
   }
 
   dimension: brewery_country {
     label: "Country"
     type: string
+    drill_fields: [brewery_state,brewery_city,brewery_name]
     map_layer_name: countries
   }
 

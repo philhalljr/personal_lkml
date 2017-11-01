@@ -326,6 +326,7 @@ view: checkin {
 
   measure: count {
     type: count
+    drill_fields: [detail*]
   }
 
   measure: avg_checkin_length {
@@ -358,5 +359,9 @@ view: checkin {
     type: number
     value_format_name: decimal_1
     sql: ${count}/${days_active} ;;
+  }
+
+  set: detail {
+    fields: [beer_name,brewery.brewery_name,checkin.rating_score,consume_venue.venue_name,created_time]
   }
 }
