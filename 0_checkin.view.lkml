@@ -361,6 +361,20 @@ view: checkin {
     sql: ${count}/${days_active} ;;
   }
 
+  measure: distinct_cities {
+    type: count_distinct
+    sql: ${venue_city} ;;
+  }
+
+  measure: distinct_states {
+    type: count_distinct
+    sql: ${venue_state} ;;
+  }
+
+  measure: distinct_countries {
+    type: count_distinct
+    sql: ${venue_country} ;;
+  }
   set: detail {
     fields: [beer_name,brewery.brewery_name,checkin.rating_score,consume_venue.venue_name,created_time]
   }
