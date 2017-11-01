@@ -205,7 +205,9 @@ view: checkin {
     timeframes: [
       raw,
       time,
+      hour_of_day,
       date,
+      day_of_week,
       week,
       month,
       quarter,
