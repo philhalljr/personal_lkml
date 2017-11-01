@@ -363,7 +363,7 @@ view: checkin {
 
   measure: distinct_cities {
     type: count_distinct
-    sql: ${venue_city} ;;
+    sql: ${venue_city_state_country} ;;
   }
 
   measure: distinct_states {
