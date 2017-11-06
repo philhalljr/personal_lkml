@@ -1,7 +1,7 @@
 include: "looker_beer_untappd.model.lkml"
 view: user_beer {
   derived_table: {
-    sql_trigger_value: CURRENT_DATE() ;;
+    sql_trigger_value: SELECT COUNT(*) FROM looker_untappd_beer.untappd_checkin ;;
     explore_source: checkin_model_ref {
       column: user_beer_id {}
       column: user_id {}
