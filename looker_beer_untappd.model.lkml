@@ -4,6 +4,7 @@ connection: "lookerdata_bigquery_standard_sql"
 include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
+week_start_day: sunday
 
 explore: checkin_model_ref {
   from: checkin
