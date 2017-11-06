@@ -358,7 +358,7 @@ view: checkin {
   measure: checkins_per_day {
     type: number
     value_format_name: decimal_1
-    sql: ${count}/${days_active} ;;
+    sql: 1.0 * ${count}/${days_active} ;;
   }
 
   measure: distinct_cities {
