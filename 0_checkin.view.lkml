@@ -161,7 +161,7 @@ view: checkin {
   dimension: brewery_name {
     type: string
     hidden: yes
-    sql: REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(${TABLE}.brewery_name,' brewery',''),' brewing',''),' company','') ;;
+    sql: REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(${TABLE}.brewery_name,' Brewery',''),' Brewing',''),' Company','') ;;
   }
 
   dimension: brewery_state {
