@@ -3,8 +3,11 @@
 ## used as the basis to created normalized data structure using NDTs
 
 view: checkin {
-  sql_table_name: looker_untappd_beer.untappd_checkin ;;
-
+  ## sql_table_name: looker_untappd_beer.untappd_checkin ;;
+  derived_table: {
+    sql: select * from looker_untappd_beer.untappd_checkin;;
+    sql_trigger_value: COUNT(*) ;;
+    }
   dimension: beer_abv {
     type: number
     hidden: yes
